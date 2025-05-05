@@ -17,6 +17,7 @@ public class PopCallback : CallbackBase
         while (t > 0f)
         {
             t -= Time.deltaTime * 2f;
+            if(letterBox == null) yield break;
             letterBox.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.2f, Mathf.Sin(Mathf.PI * (1 - t)));
             yield return null;
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LetterBox _letterBoxPrefab;
     [SerializeField] private float _roundTimer = 30f;
     [SerializeField] private Image _timerFillImage;
+    [SerializeField] private TextMeshProUGUI _gameProcessText;
     private CallbacksPreset _callbacksPreset;
     private Queue<string> _wordsQueue = new Queue<string>();
     private LetterSlot[] _letterSlots;
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
     private DateTime _startRoundTime;
     private float[] _roundsTimers;
     private System.Random _random;
+    private string _currentWord = string.Empty;
     public void RestartGame(CallbacksPreset preset, Action<int,int,float> gameOverAction, int seed)
     {
         if(preset == null) return;
@@ -51,8 +54,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         ClearWord();
-        string word = _wordsQueue.Dequeue();
-        int lettersCount = word.Length;
+        _currentWord = _wordsQueue.Dequeue();
+        int lettersCount = _currentWord.Length;
         _letterSlots = new LetterSlot[lettersCount];
         _letterBoxes = new LetterBox[lettersCount];
 
@@ -65,21 +68,21 @@ public class GameManager : MonoBehaviour
             _letterSlots[i] = letterSlot;
         }
         //spawn letter boxes
-        List<int> indexes = new();
         for (int i = 0; i < lettersCount; i++)
         {
             LetterBox letterBox = Instantiate(_letterBoxPrefab, _freeZone);
             letterBox.gameObject.name = $"LetterBox_{i}";
-            indexes.Clear();
-            //collect indexes of this letter in word, we need to collect all indexes of the same letter in word, to allow replacement of same letters in word
-            for (int j = 0; j < lettersCount; j++)
-            {
-                if (word[j] == word[i]) indexes.Add(j);
-            }
-            letterBox.Setup(word[i].ToString(), indexes, _callbacksPreset);
+            letterBox.Setup(_currentWord[i].ToString(), _callbacksPreset);
             _letterBoxes[i] = letterBox;
-            _letterBoxes[i].transform.SetSiblingIndex(_random.Next(0, _freeZone.childCount));
+            _letterBoxes[i].transform.position = _freeZone.position + Vector3.left * lettersCount/2 * 150f + Vector3.right * i * 180f;
             letterBox.OnEndDragAction += OnLetterBoxEndDrag;
+        }
+        for (int i = 0; i < lettersCount; i++)
+        {
+            var pos = _letterBoxes[i].transform.position;
+            int rID = _random.Next(0, lettersCount);
+            _letterBoxes[i].transform.position = _letterBoxes[rID].transform.position;
+            _letterBoxes[rID].transform.position = pos;
         }
         if(_timerCoroutine != null)
         {
@@ -88,14 +91,18 @@ public class GameManager : MonoBehaviour
         }
         _startRoundTime = DateTime.Now;
         _timerCoroutine = StartCoroutine(TimerRoutine());
+
+        _gameProcessText.text = string.Format("{0}/{1}", _wordsLibrary.Words.Count - _wordsQueue.Count, _wordsLibrary.Words.Count);
     }
     private void CheckIfWordIsComplete()
     {
+        string word = string.Empty;
         for (int i = 0; i < _letterSlots.Length; i++)
         {
             if (_letterSlots[i].StoredLetterBox == null) return;
-            if(!_letterSlots[i].StoredLetterBox.IsInCorrectSlot) return;
+            word += _letterSlots[i].StoredLetterBox.Letter;
         }
+        if(word != _currentWord) return;
         //word is complete
         SpawnNewWord();
     }

@@ -10,24 +10,20 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 {
     [SerializeField] private TextMeshProUGUI _letterText;
     [SerializeField] private CanvasGroup _canvasGroup;
-    private List<int> _inWordId = new();
     private int _ownerSlotID = -1;
     private bool _isInWord = false;
     private Vector3 _mouseOffset;
     private Transform _parentTransform;
     private Vector3 _startDragPosition;
     private CallbacksPreset _callbacksPreset;
-    [ShowNativeProperty] public List<int> InWordId => _inWordId;
     [ShowNativeProperty] public int OwnerSlotID => _ownerSlotID;
     public string Letter => _letterText.text;
     [ShowNativeProperty] public bool IsInWord => _isInWord;
-    [ShowNativeProperty] public bool IsInCorrectSlot => _isInWord && _inWordId.Contains(_ownerSlotID);
     public Action<LetterBox> OnEndDragAction;
 
-    public void Setup(string letter, List<int> inWordId, CallbacksPreset callbacksPreset)
+    public void Setup(string letter, CallbacksPreset callbacksPreset)
     {
         _letterText.text = letter;
-        _inWordId = inWordId;
         _callbacksPreset = callbacksPreset;
     }
     public void OnAddedToWord(int slotID)
@@ -42,6 +38,7 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     }
     public void FlyBack()
     {
+        return; // fly back removed
         //fly back to position of start dragging process
         StartCoroutine(FlyBackRoutine());
     }
@@ -51,7 +48,9 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         _mouseOffset = (Vector3)eventData.position - transform.position;
         _startDragPosition = transform.position;
         _parentTransform = transform.parent;
-        transform.SetParent(_parentTransform.parent.parent);
+        if(_parentTransform.parent != null)
+            transform.SetParent(_parentTransform.parent.parent);
+        transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -63,6 +62,7 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public void OnEndDrag(PointerEventData eventData)
     {
         _mouseOffset = Vector3.zero;
+        transform.SetParent(_parentTransform);
         OnEndDragAction?.Invoke(this);
     }
 
