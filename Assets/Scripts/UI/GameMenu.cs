@@ -10,7 +10,7 @@ public class GameMenu : MonoBehaviour
     [SerializeField] private Button _startCustomGameButton;
     [SerializeField] private Button _openCallbacksSettingsButton;
     [SerializeField] private Button _exitButton;
-    [SerializeField] private GameObject _mainMenuView; 
+    [SerializeField] private GameObject _mainMenuView;
     [SerializeField] private GameObject _gameOverView;
     [SerializeField] private TextMeshProUGUI _gameStatsText;
     [SerializeField] private CallbacksSettingsMenu _callbacksSettingsMenu;
@@ -30,14 +30,14 @@ public class GameMenu : MonoBehaviour
     }
     private void OnStartRandomGameButtonClicked()
     {
-        _setSeedView.SetActive(true);
-        _seedInputField.text = string.Empty;
+        _gameManager.RestartGame(_callbacksSettingsMenu.GetCurrentPreset(), OnGameOver, Random.Range(0, 10000));
+        _mainMenuView.SetActive(false);
         _gameOverView.SetActive(false);
     }
     private void OnStartCustomGameButtonClicked()
     {
-        _gameManager.RestartGame(_callbacksSettingsMenu.GetCurrentPreset(), OnGameOver, Random.Range(0, 10000));
-        _mainMenuView.SetActive(false);
+        _setSeedView.SetActive(true);
+        _seedInputField.text = string.Empty;
         _gameOverView.SetActive(false);
     }
     private void OnOpenCallbacksSettingsButtonClicked()
