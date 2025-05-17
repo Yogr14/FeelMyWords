@@ -19,6 +19,7 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     [ShowNativeProperty] public int OwnerSlotID => _ownerSlotID;
     public string Letter => _letterText.text;
     [ShowNativeProperty] public bool IsInWord => _isInWord;
+
     public Action<LetterBox> OnEndDragAction;
 
     public void Setup(string letter, CallbacksPreset callbacksPreset)
@@ -48,14 +49,14 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         _mouseOffset = (Vector3)eventData.position - transform.position;
         _startDragPosition = transform.position;
         _parentTransform = transform.parent;
-        if(_parentTransform.parent != null)
+        if (_parentTransform.parent != null)
             transform.SetParent(_parentTransform.parent.parent);
         transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-       transform.position = (Vector3)eventData.position - _mouseOffset;
+        transform.position = (Vector3)eventData.position - _mouseOffset;
 
     }
 
@@ -68,7 +69,7 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(_callbacksPreset == null) return;
+        if (_callbacksPreset == null) return;
         foreach (var callback in _callbacksPreset.Callbacks)
         {
             if (callback.IsEnabled)
@@ -80,7 +81,7 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if(_callbacksPreset == null) return;
+        if (_callbacksPreset == null) return;
         foreach (var callback in _callbacksPreset.Callbacks)
         {
             if (callback.IsEnabled)
@@ -91,7 +92,7 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(_callbacksPreset == null) return;
+        if (_callbacksPreset == null) return;
         foreach (var callback in _callbacksPreset.Callbacks)
         {
             if (callback.IsEnabled)
@@ -102,7 +103,7 @@ public class LetterBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        if(_callbacksPreset == null) return;
+        if (_callbacksPreset == null) return;
         foreach (var callback in _callbacksPreset.Callbacks)
         {
             if (callback.IsEnabled)
