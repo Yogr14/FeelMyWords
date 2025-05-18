@@ -12,14 +12,15 @@ public class PopCallback : CallbackBase
 
     private IEnumerator Pop(GameObject letterBox)
     {
-        float t = 1f;
+        // float t = 1f;
 
-        while (t > 0f)
-        {
-            t -= Time.deltaTime * 2f;
-            if(letterBox == null) yield break;
-            letterBox.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.2f, Mathf.Sin(Mathf.PI * (1 - t)));
-            yield return null;
-        }
+        // while (t > 0f)
+        // {
+        //     t -= Time.deltaTime * 2f;
+        //     if (letterBox == null) yield break;
+        //     letterBox.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.2f, Mathf.Sin(Mathf.PI * (1 - t)));
+        //     yield return null;
+        // }
+        yield return null;
     }
 }

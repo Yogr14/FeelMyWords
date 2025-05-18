@@ -11,9 +11,12 @@ GameObject:
   - component: {fileID: 688402609184341341}
   - component: {fileID: 110142225993195209}
   - component: {fileID: 4316082515915326618}
+  - component: {fileID: -3976862386589200896}
   - component: {fileID: 376842179010176911}
   - component: {fileID: 1031459383153886512}
-  - component: {fileID: 2300093509319896498}
+  - component: {fileID: 4161851478523906166}
+  - component: {fileID: 350790399334834343}
+  - component: {fileID: 8856650745173100556}
   m_Layer: 5
   m_Name: LetterBox
   m_TagString: Untagged
@@ -79,6 +82,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &-3976862386589200896
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68380914326090366}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &376842179010176911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _letterText: {fileID: 6642365623373225116}
-  _canvasGroup: {fileID: 2300093509319896498}
+  _canvasGroup: {fileID: -3976862386589200896}
 --- !u!114 &1031459383153886512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,18 +122,121 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxTiltAngle: 90
   _tiltSpeed: 70
---- !u!225 &2300093509319896498
-CanvasGroup:
+--- !u!114 &4161851478523906166
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 68380914326090366}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa0f8fb5107f00044ae60b964bc96628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trailPrefab: {fileID: 8012966983313808327, guid: 84c57ae97ba21bb428a9acb288dd7eb9, type: 3}
+  _baseTrailInterval: 0.01
+  _fadeDuration: 0.8
+  _fadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.8120308
+      inSlope: -2.142871
+      outSlope: -2.142871
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.05263157
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.26113647
+      outSlope: -0.26113647
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.16315806
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _speedToFrequencyCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.008412705
+      outSlope: 0.008412705
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.56112856
+    - serializedVersion: 3
+      time: 112.55502
+      value: 0.6939167
+      inSlope: 0.0018229961
+      outSlope: 0.0018229961
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.668395
+    - serializedVersion: 3
+      time: 295.87872
+      value: 1
+      inSlope: -5.0445587e-10
+      outSlope: -5.0445587e-10
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.16780676
+    - serializedVersion: 3
+      time: 1000
+      value: 1
+      inSlope: 6.7949246e-10
+      outSlope: 6.7949246e-10
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.099040635
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _rotateTrailWithTarget: 0
+--- !u!114 &350790399334834343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68380914326090366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c94afae015fa4244aaa6a2d2d36dc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverScale: 1.2
+  rotationAngle: 15
+  effectDuration: 0.2
+--- !u!114 &8856650745173100556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68380914326090366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b8728edc498f0742b11bc65c9144710, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlePrefab: {fileID: 347362634299259341, guid: 26d5559d9f026264fb50552966da6196, type: 3}
+  particleCount: 20
+  explosionRadius: 100
+  _particleLifetimeRange: {x: 0.4, y: 0.6}
+  gravity: -500
+  _yOffset: 30
 --- !u!1 &957030412519524273
 GameObject:
   m_ObjectHideFlags: 0
