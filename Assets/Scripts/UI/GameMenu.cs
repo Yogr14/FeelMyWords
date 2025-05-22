@@ -16,7 +16,8 @@ public class GameMenu : MonoBehaviour
     [SerializeField] private CallbacksSettingsMenu _callbacksSettingsMenu;
     [SerializeField] private GameObject _setSeedView;
     [SerializeField] private TMPro.TMP_InputField _seedInputField;
-    [SerializeField] private Button _setSeedButton;
+    [SerializeField] private StartSurveyMenu _startSurveyMenu;
+
 
     [Header("Logic"), SerializeField] private GameManager _gameManager;
 
@@ -26,7 +27,7 @@ public class GameMenu : MonoBehaviour
         _startCustomGameButton.onClick.AddListener(OnStartCustomGameButtonClicked);
         _openCallbacksSettingsButton.onClick.AddListener(OnOpenCallbacksSettingsButtonClicked);
         _exitButton.onClick.AddListener(OnExitButtonClicked);
-        _setSeedButton.onClick.AddListener(OnSetSeedButtonClicked);
+        _startSurveyMenu.SetCallback(TryStartCustomGame);
     }
     private void OnStartRandomGameButtonClicked()
     {
@@ -37,7 +38,6 @@ public class GameMenu : MonoBehaviour
     private void OnStartCustomGameButtonClicked()
     {
         _setSeedView.SetActive(true);
-        _seedInputField.text = string.Empty;
         _gameOverView.SetActive(false);
     }
     private void OnOpenCallbacksSettingsButtonClicked()
@@ -48,7 +48,7 @@ public class GameMenu : MonoBehaviour
     {
         Application.Quit();
     }
-    private void OnSetSeedButtonClicked()
+    private void TryStartCustomGame()
     {
         if (int.TryParse(_seedInputField.text, out int seed))
         {
