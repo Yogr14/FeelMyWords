@@ -51,6 +51,7 @@ public class StartSurveyMenu : MonoBehaviour
         _userGroup.text = PlayerPrefs.GetString(UserGroupKey, "ПСИ-324");
         _teacherLastName.text = PlayerPrefs.GetString(TeacherLastNameKey, "Ардисламов");
         _disciplineName.text = PlayerPrefs.GetString(DisciplineNameKey, "Критическое мышление");
+        _platformToggle.isOn = PlayerPrefs.GetString(PlatformKey, "PC") == "PC";
 
         //subscribe to events to update saved data
         _userGender.onValueChanged.AddListener((v) => { PlayerPrefs.SetString(UserGenderKey, v ? "Male" : "Female"); });
@@ -61,6 +62,7 @@ public class StartSurveyMenu : MonoBehaviour
         _userGroup.onValueChanged.AddListener((v) => { PlayerPrefs.SetString(UserGroupKey, v); CheckIfDataIsFull(); });
         _teacherLastName.onValueChanged.AddListener((v) => { PlayerPrefs.SetString(TeacherLastNameKey, v); CheckIfDataIsFull(); });
         _disciplineName.onValueChanged.AddListener((v) => { PlayerPrefs.SetString(DisciplineNameKey, v); CheckIfDataIsFull(); });
+        _platformToggle.onValueChanged.AddListener((v) => { PlayerPrefs.SetString(PlatformKey, v ? "PC" : "Mobile"); });
     }
     public void SetCallback(Action startGameCallback)
     {
@@ -80,6 +82,7 @@ public class StartSurveyMenu : MonoBehaviour
         _userGroup.gameObject.SetActive(true);
         _teacherLastName.gameObject.SetActive(true);
         _disciplineName.gameObject.SetActive(true);
+        _platformToggle.gameObject.SetActive(true);
         _startGameButton.interactable = false;
         _isSimpleSurvey = false;
         CheckIfDataIsFull();
@@ -97,7 +100,9 @@ public class StartSurveyMenu : MonoBehaviour
         _userGroup.gameObject.SetActive(false);
         _teacherLastName.gameObject.SetActive(false);
         _disciplineName.gameObject.SetActive(false);
+        _platformToggle.gameObject.SetActive(true);
         _startGameButton.interactable = false;
+
         _isSimpleSurvey = true;
         CheckIfDataIsFull();
     }
