@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static int RunRundomSeed;
     [SerializeField] private WordsLib _wordsLibrary;
     [SerializeField] private RectTransform _wordZone;
     [SerializeField] private RectTransform _freeZone;
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
             _wordsQueue.Enqueue(words[randomIndex]);
             words.RemoveAt(randomIndex);
         }
-
+        RunRundomSeed = UnityEngine.Random.Range(0, 100);
         SpawnNewWord();
     }
 

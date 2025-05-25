@@ -8,6 +8,17 @@ public class CardTiltOnDrag : MonoBehaviour
 
     private Vector3 _lastPosition;
     private float _currentTilt = 0f;
+    private void Awake()
+    {
+        enabled = RandomEnabled(GameManager.RunRundomSeed);
+        Debug.LogFormat("{0} enabled: {1}", GetType().Name, enabled);
+    }
+    public static bool RandomEnabled(int runSeed)
+    {
+        int typeHash = typeof(CardTiltOnDrag).Name.GetHashCode();
+        int randomValue = new System.Random(runSeed + typeHash).Next(0, 100);
+        return randomValue < 50; // 50% шанс включить эффект
+    }
 
     private void Start()
     {

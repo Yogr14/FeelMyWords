@@ -13,6 +13,17 @@ public class UICardWiggleCoroutine : MonoBehaviour, IPointerEnterHandler, IPoint
     public float rotationAngle = 5f;
     public float effectDuration = 0.1f;
 
+    private void Awake()
+    {
+        enabled = RandomEnabled(GameManager.RunRundomSeed);
+        Debug.LogFormat("{0} enabled: {1}", GetType().Name, enabled);
+    }
+    public static bool RandomEnabled(int runSeed)
+    {
+        int typeHash = typeof(UICardWiggleCoroutine).Name.GetHashCode();
+        int randomValue = new System.Random(runSeed + typeHash).Next(0, 100);
+        return randomValue < 50; // 50% шанс включить эффект
+    }
     void Start()
     {
         originalScale = transform.localScale;

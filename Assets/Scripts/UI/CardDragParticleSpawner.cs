@@ -9,20 +9,32 @@ public class CardDragParticleSpawner : MonoBehaviour, IEndDragHandler
     public Vector2 _particleLifetimeRange = new Vector2(0.5f, 1f);
     public float gravity = -500f; // Отрицательное значение для движения вниз
     public float _yOffset = 0f;
+    private RectTransform _particleRectTransform;
 
+    private void Awake()
+    {
+        enabled = RandomEnabled(GameManager.RunRundomSeed);
+        Debug.LogFormat("{0} enabled: {1}", GetType().Name, enabled);
+    }
+    public static bool RandomEnabled(int runSeed)
+    {
+        int typeHash = typeof(CardDragParticleSpawner).Name.GetHashCode();
+        int randomValue = new System.Random(runSeed + typeHash).Next(0, 100);
+        return randomValue < 50; // 50% шанс включить эффект
+    }
     public void OnEndDrag(PointerEventData eventData)
     {
         for (int i = 0; i < particleCount; i++)
         {
             GameObject particle = Instantiate(particlePrefab, transform.parent);
-            RectTransform rt = particle.GetComponent<RectTransform>();
-            rt.position = transform.position;
+            _particleRectTransform = particle.GetComponent<RectTransform>();
+            _particleRectTransform.position = transform.position;
 
             // Случайное начальное направление, но вверх/в стороны
             Vector2 dir = Random.insideUnitCircle.normalized;
             Vector2 initialVelocity = dir * (explosionRadius / _particleLifetimeRange.y); // Скорость зависит от радиуса и времени
 
-            StartCoroutine(ExplodeParticle(rt, initialVelocity));
+            StartCoroutine(ExplodeParticle(_particleRectTransform, initialVelocity));
         }
     }
 
@@ -51,5 +63,10 @@ public class CardDragParticleSpawner : MonoBehaviour, IEndDragHandler
         }
 
         Destroy(rt.gameObject);
+    }
+    private void OnDestroy()
+    {
+        if(_particleRectTransform != null) Destroy(_particleRectTransform.gameObject);
+        _particleRectTransform = null;
     }
 }
