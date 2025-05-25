@@ -100,7 +100,7 @@ public class StartSurveyMenu : MonoBehaviour
         _userGroup.gameObject.SetActive(false);
         _teacherLastName.gameObject.SetActive(false);
         _disciplineName.gameObject.SetActive(false);
-        _platformToggle.gameObject.SetActive(false);
+        _platformToggle.gameObject.SetActive(true);
         _startGameButton.interactable = false;
 
         _isSimpleSurvey = true;
