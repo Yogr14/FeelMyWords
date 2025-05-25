@@ -37,8 +37,8 @@ public class UICardWiggleCoroutine : MonoBehaviour, IPointerEnterHandler, IPoint
             isHovering = true;
 
             // Запоминаем позицию и поднимаем карточку вверх по иерархии
-            originalSiblingIndex = transform.GetSiblingIndex();
-            transform.SetAsLastSibling();
+           // originalSiblingIndex = transform.GetSiblingIndex();
+           // transform.SetAsLastSibling();
 
             StopAllCoroutines();
             StartCoroutine(WiggleOnly());
@@ -50,10 +50,11 @@ public class UICardWiggleCoroutine : MonoBehaviour, IPointerEnterHandler, IPoint
         isHovering = false;
 
         // Возвращаем карточку обратно
-        transform.SetSiblingIndex(originalSiblingIndex);
+        //transform.SetSiblingIndex(originalSiblingIndex);
 
         StopAllCoroutines();
         StartCoroutine(ResetAll());
+        //Debug.LogError("OnPointerExit called, sibling index reset to: " + originalSiblingIndex);
     }
 
     IEnumerator WiggleOnly()

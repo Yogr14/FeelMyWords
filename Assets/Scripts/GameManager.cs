@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         _startRoundTime = DateTime.Now;
         _timerCoroutine = StartCoroutine(TimerRoutine());
 
-        _gameProcessText.text = string.Format("{0}/{1}", _wordsLibrary.Words.Count - _wordsQueue.Count, _wordsLibrary.Words.Count);
+        _gameProcessText.text = string.Format("{0}/{1}", Mathf.Clamp(_wordsLibrary.Words.Count - _wordsQueue.Count, 0, int.MaxValue), _wordsLibrary.Words.Count);
     }
     private void CheckIfWordIsComplete()
     {
