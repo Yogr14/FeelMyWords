@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class UICardWiggleCoroutine : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IEndDragHandler
+public class UICardWiggleCoroutine : MonoBehaviour, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Vector3 originalScale;
     private Quaternion originalRotation;
@@ -30,7 +30,21 @@ public class UICardWiggleCoroutine : MonoBehaviour, IPointerEnterHandler, IPoint
         originalRotation = transform.rotation;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    // public void OnPointerEnter(PointerEventData eventData)
+    // {
+    //     if (!isHovering)
+    //     {
+    //         isHovering = true;
+
+    //         // Запоминаем позицию и поднимаем карточку вверх по иерархии
+    //        // originalSiblingIndex = transform.GetSiblingIndex();
+    //        // transform.SetAsLastSibling();
+
+    //         StopAllCoroutines();
+    //         StartCoroutine(WiggleOnly());
+    //     }
+    // }
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (!isHovering)
         {
@@ -44,8 +58,7 @@ public class UICardWiggleCoroutine : MonoBehaviour, IPointerEnterHandler, IPoint
             StartCoroutine(WiggleOnly());
         }
     }
-
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
         isHovering = false;
 
@@ -56,6 +69,18 @@ public class UICardWiggleCoroutine : MonoBehaviour, IPointerEnterHandler, IPoint
         StartCoroutine(ResetAll());
         //Debug.LogError("OnPointerExit called, sibling index reset to: " + originalSiblingIndex);
     }
+
+    // public void OnPointerExit(PointerEventData eventData)
+    // {
+    //     isHovering = false;
+
+    //     // Возвращаем карточку обратно
+    //     //transform.SetSiblingIndex(originalSiblingIndex);
+
+    //     StopAllCoroutines();
+    //     StartCoroutine(ResetAll());
+    //     //Debug.LogError("OnPointerExit called, sibling index reset to: " + originalSiblingIndex);
+    // }
 
     IEnumerator WiggleOnly()
     {
