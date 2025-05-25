@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4055b9d96982b4595ea06234987038, type: 3}
   m_Name: CallbacksPreset
   m_EditorClassIdentifier: 
-  _callbacks:
-  - {fileID: 11400000, guid: 99ae49ab30db4294fa9faef14846d7c4, type: 2}
+  _callbacks: []
