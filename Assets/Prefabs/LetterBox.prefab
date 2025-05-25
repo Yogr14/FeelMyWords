@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverScale: 1.2
-  rotationAngle: 15
+  rotationAngle: 0
   effectDuration: 0.2
 --- !u!114 &8856650745173100556
 MonoBehaviour:
