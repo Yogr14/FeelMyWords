@@ -43,12 +43,12 @@ public class StartSurveyMenu : MonoBehaviour
         //load saved data
         _userGender.isOn = PlayerPrefs.GetString(UserGenderKey, "Male") == "Male";
         _userAge.text = PlayerPrefs.GetInt(UserAgeKey, 18).ToString();
-        _userGoogleTableLink.text = PlayerPrefs.GetString(UserGoogleTableLinkKey, string.Empty);
-        _userName.text = PlayerPrefs.GetString(UserNameKey, string.Empty);
-        _userTelegramNickname.text = PlayerPrefs.GetString(UserTelegramNicknameKey, string.Empty);
-        _userGroup.text = PlayerPrefs.GetString(UserGroupKey, string.Empty);
-        _teacherLastName.text = PlayerPrefs.GetString(TeacherLastNameKey, string.Empty);
-        _disciplineName.text = PlayerPrefs.GetString(DisciplineNameKey, string.Empty);
+        _userGoogleTableLink.text = PlayerPrefs.GetString(UserGoogleTableLinkKey, "1234");
+        _userName.text = PlayerPrefs.GetString(UserNameKey, "Иванов Иван Иванович");
+        _userTelegramNickname.text = PlayerPrefs.GetString(UserTelegramNicknameKey, "@ivan");
+        _userGroup.text = PlayerPrefs.GetString(UserGroupKey, "ПСИ-324");
+        _teacherLastName.text = PlayerPrefs.GetString(TeacherLastNameKey, "Ардисламов");
+        _disciplineName.text = PlayerPrefs.GetString(DisciplineNameKey, "Критическое мышление");
 
         //subscribe to events to update saved data
         _userGender.onValueChanged.AddListener((v) => { PlayerPrefs.SetString(UserGenderKey, v ? "Male" : "Female"); });
