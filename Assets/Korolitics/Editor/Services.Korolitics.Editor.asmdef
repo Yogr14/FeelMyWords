@@ -1,0 +1,18 @@
+{
+    "name": "Services.Korolitics.Editor",
+    "rootNamespace": "Services.Korolitics.Editor",
+    "references": [
+        "GUID:956e48ee2829d374690a3ea40cc9fce6"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
