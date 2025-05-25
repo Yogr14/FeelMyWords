@@ -119,8 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f96e378148655b43b7bdefd2fecba02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxTiltAngle: 90
-  _tiltSpeed: 70
+  _maxTiltAngle: 75
+  _tiltSpeed: 10
 --- !u!114 &350790399334834343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverScale: 1.2
-  rotationAngle: 15
+  rotationAngle: 0
   effectDuration: 0.2
 --- !u!114 &8856650745173100556
 MonoBehaviour:
