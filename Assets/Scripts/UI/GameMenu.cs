@@ -56,6 +56,7 @@ public class GameMenu : MonoBehaviour
             _mainMenuView.SetActive(false);
             _gameOverView.SetActive(false);
             _setSeedView.SetActive(false);
+            AnalyticsSender.SendStartRunEvent();
         }
         else
         {

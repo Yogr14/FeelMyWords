@@ -21,22 +21,23 @@ public class GameManager : MonoBehaviour
     private Queue<string> _wordsQueue = new Queue<string>();
     private LetterSlot[] _letterSlots;
     private LetterBox[] _letterBoxes;
-    private Action<int,int,float> _gameOverAction;
+    private Action<int, int, float> _gameOverAction;
     private Coroutine _timerCoroutine;
     private int _failedRounds = 0;
     private DateTime _startRoundTime;
     private float[] _roundsTimers;
     private System.Random _random;
     private string _currentWord = string.Empty;
-    public void RestartGame(CallbacksPreset preset, Action<int,int,float> gameOverAction, int seed)
+    private float _timeLeft = 0f;
+    public void RestartGame(CallbacksPreset preset, Action<int, int, float> gameOverAction, int seed)
     {
-        if(preset == null) return;
+        if (preset == null) return;
         _callbacksPreset = preset;
         _gameOverAction = gameOverAction;
         _random = new System.Random(seed);
         _roundsTimers = new float[_wordsLibrary.Words.Count];
         List<string> words = new(_wordsLibrary.Words);
-        while(words.Count > 0)
+        while (words.Count > 0)
         {
             int randomIndex = _random.Next(0, words.Count);
             _wordsQueue.Enqueue(words[randomIndex]);
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private void SpawnNewWord()
     {
-        if(_wordsQueue.Count == 0)
+        if (_wordsQueue.Count == 0)
         {
             _gameOverAction?.Invoke(_wordsLibrary.Words.Count - _failedRounds, _wordsLibrary.Words.Count, _roundsTimers.Sum() / _roundsTimers.Length);
             _gameOverAction = null;
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
             letterBox.gameObject.name = $"LetterBox_{i}";
             letterBox.Setup(_currentWord[i].ToString(), _callbacksPreset);
             _letterBoxes[i] = letterBox;
-            _letterBoxes[i].transform.position = _freeZone.position + Vector3.left * lettersCount/2 * 150f + Vector3.right * i * 180f;
+            _letterBoxes[i].transform.position = _freeZone.position + Vector3.left * lettersCount / 2 * 150f + Vector3.right * i * 180f;
             letterBox.OnEndDragAction += OnLetterBoxEndDrag;
         }
         for (int i = 0; i < lettersCount; i++)
@@ -85,10 +86,10 @@ public class GameManager : MonoBehaviour
             _letterBoxes[i].transform.position = _letterBoxes[rID].transform.position;
             _letterBoxes[rID].transform.position = pos;
         }
-        if(_timerCoroutine != null)
+        if (_timerCoroutine != null)
         {
             StopCoroutine(_timerCoroutine);
-            _roundsTimers[_wordsLibrary.Words.Count - _wordsQueue.Count-1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
+            _roundsTimers[_wordsLibrary.Words.Count - _wordsQueue.Count - 1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
         }
         _startRoundTime = DateTime.Now;
         _timerCoroutine = StartCoroutine(TimerRoutine());
@@ -103,13 +104,14 @@ public class GameManager : MonoBehaviour
             if (_letterSlots[i].StoredLetterBox == null) return;
             word += _letterSlots[i].StoredLetterBox.Letter;
         }
-        if(word != _currentWord) return;
+        if (word != _currentWord) return;
+        AnalyticsSender.SendWordEvent(_currentWord, false, _roundTimer - _timeLeft, GetEffectsState());
         //word is complete
         SpawnNewWord();
     }
     private void ClearWord()
     {
-        if(_letterSlots == null || _letterBoxes == null) return;
+        if (_letterSlots == null || _letterBoxes == null) return;
         for (int i = 0; i < _letterBoxes.Length; i++)
         {
             Destroy(_letterBoxes[i].gameObject);
@@ -121,15 +123,15 @@ public class GameManager : MonoBehaviour
     }
     private void OnLetterBoxEndDrag(LetterBox letterBox)
     {
-        if(letterBox.IsInWord)
+        if (letterBox.IsInWord)
         {
-            if(RectTransformUtility.RectangleContainsScreenPoint(_wordZone, letterBox.transform.position))
+            if (RectTransformUtility.RectangleContainsScreenPoint(_wordZone, letterBox.transform.position))
             {
                 //try swap between slots
-                if(!TrySwapSlot(letterBox)) letterBox.FlyBack();
+                if (!TrySwapSlot(letterBox)) letterBox.FlyBack();
                 else CheckIfWordIsComplete();
             }
-            else 
+            else
             {
                 //remove from word
                 _letterSlots[letterBox.OwnerSlotID].ClearSlot();
@@ -139,7 +141,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if(!TryEnqueueSlot(letterBox)) letterBox.FlyBack();
+            if (!TryEnqueueSlot(letterBox)) letterBox.FlyBack();
             else CheckIfWordIsComplete();
         }
     }
@@ -172,15 +174,24 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator TimerRoutine()
     {
-        float timer = _roundTimer;
-        while (timer > 0)
+        _timeLeft = _roundTimer;
+        while (_timeLeft > 0)
         {
-            timer -= Time.deltaTime;
-            _timerFillImage.fillAmount = 1f - timer / _roundTimer;
+            _timeLeft -= Time.deltaTime;
+            _timerFillImage.fillAmount = 1f - _timeLeft / _roundTimer;
             yield return null;
         }
         _failedRounds++;
-        _roundsTimers[_wordsLibrary.Words.Count - _wordsQueue.Count-1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
+        _roundsTimers[_wordsLibrary.Words.Count - _wordsQueue.Count - 1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
+        AnalyticsSender.SendWordEvent(_currentWord, true, _roundTimer, GetEffectsState());
         SpawnNewWord();
+    }
+    private Dictionary<string, bool> GetEffectsState()
+    {
+        Dictionary<string, bool> effectsState = new Dictionary<string, bool>();
+        effectsState.Add(typeof(CardDragParticleSpawner).Name, CardDragParticleSpawner.RandomEnabled(RunRundomSeed));
+        effectsState.Add(typeof(CardTiltOnDrag).Name, CardTiltOnDrag.RandomEnabled(RunRundomSeed));
+        effectsState.Add(typeof(UICardWiggleCoroutine).Name, UICardWiggleCoroutine.RandomEnabled(RunRundomSeed));
+        return effectsState;
     }
 }

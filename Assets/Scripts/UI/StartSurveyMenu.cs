@@ -15,6 +15,7 @@ public class StartSurveyMenu : MonoBehaviour
     public const string UserGroupKey = "UserGroup";
     public const string TeacherLastNameKey = "TeacherLastName";
     public const string DisciplineNameKey = "DisciplineName";
+    public const string PlatformKey = "UserPlatform";
     [Header("Initial question"), SerializeField] private GameObject _initialQuestionView;
     [SerializeField] private TMPro.TMP_InputField _seedInputField;
     [SerializeField] private Button _startFullSurveyButton;
@@ -28,6 +29,7 @@ public class StartSurveyMenu : MonoBehaviour
     [SerializeField] private TMPro.TMP_InputField _userGroup;
     [SerializeField] private TMPro.TMP_InputField _teacherLastName;
     [SerializeField] private TMPro.TMP_InputField _disciplineName;
+    [SerializeField, Tooltip("True - PC, False - Mobile")] private Toggle _platformToggle;
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _backButton;
     private bool _isSimpleSurvey;
