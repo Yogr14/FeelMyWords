@@ -13,7 +13,7 @@ public class AnalyticsSender : MonoBehaviour
         {
             { StartSurveyMenu.UserGenderKey, PlayerPrefs.GetString(StartSurveyMenu.UserGenderKey, "Male") },
             { StartSurveyMenu.UserAgeKey, PlayerPrefs.GetInt(StartSurveyMenu.UserAgeKey, 18)},
-            { StartSurveyMenu.UserGoogleTableLinkKey, PlayerPrefs.GetString(StartSurveyMenu.UserGoogleTableLinkKey, "https://docs.google.com/spreadsheets/d/1ciOKrOUA4lT9YmTR3B0741JlBUOkZdDG2MYXrpF26c4/htmlview") },
+            { StartSurveyMenu.UserGoogleTableLinkKey, PlayerPrefs.GetString(StartSurveyMenu.UserGoogleTableLinkKey, "-1") },
             { StartSurveyMenu.UserNameKey, PlayerPrefs.GetString(StartSurveyMenu.UserNameKey, "Иванов Иван Иванович") },
             { StartSurveyMenu.UserTelegramNicknameKey, PlayerPrefs.GetString(StartSurveyMenu.UserTelegramNicknameKey, "@ivan") },
             { StartSurveyMenu.UserGroupKey, PlayerPrefs.GetString(StartSurveyMenu.UserGroupKey, "ПСИ-324") },
