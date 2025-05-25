@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Services.Korolitics.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +29,7 @@ public class GameMenu : MonoBehaviour
         _openCallbacksSettingsButton.onClick.AddListener(OnOpenCallbacksSettingsButtonClicked);
         _exitButton.onClick.AddListener(OnExitButtonClicked);
         _startSurveyMenu.SetCallback(TryStartCustomGame);
+        StartCoroutine(KorolitcsManager.Initialize());
     }
     private void OnStartRandomGameButtonClicked()
     {
@@ -62,6 +64,7 @@ public class GameMenu : MonoBehaviour
         {
             Debug.LogError("Invalid seed value.");
         }
+        
     }
     private void OnGameOver(int passedRounds, int totalRounds, float averageRoundTime)
     {

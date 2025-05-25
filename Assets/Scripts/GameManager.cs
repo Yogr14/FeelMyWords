@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     private LetterBox[] _letterBoxes;
     private Action<int, int, float> _gameOverAction;
     private Coroutine _timerCoroutine;
+    private int _finishedWordsCount = 0;
     private int _failedRounds = 0;
     private DateTime _startRoundTime;
     private float[] _roundsTimers;
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
         _callbacksPreset = preset;
         _gameOverAction = gameOverAction;
         _random = new System.Random(seed);
-        _roundsTimers = new float[_wordsLibrary.Words.Count];
+        _roundsTimers = new float[_wordsLibrary.WordsPerRound];
         List<string> words = new(_wordsLibrary.Words);
         while (words.Count > 0)
         {
@@ -44,14 +45,16 @@ public class GameManager : MonoBehaviour
             words.RemoveAt(randomIndex);
         }
         RunRundomSeed = UnityEngine.Random.Range(0, 100);
+        _finishedWordsCount = 0;
+        _failedRounds = 0;
         SpawnNewWord();
     }
 
     private void SpawnNewWord()
     {
-        if (_wordsQueue.Count == 0)
+        if (_wordsQueue.Count == 0 || _finishedWordsCount >= _wordsLibrary.WordsPerRound)
         {
-            _gameOverAction?.Invoke(_wordsLibrary.Words.Count - _failedRounds, _wordsLibrary.Words.Count, _roundsTimers.Sum() / _roundsTimers.Length);
+            _gameOverAction?.Invoke(_wordsLibrary.WordsPerRound - _failedRounds, _wordsLibrary.WordsPerRound, _roundsTimers.Sum() / _roundsTimers.Length);
             _gameOverAction = null;
             return;
         }
@@ -89,12 +92,12 @@ public class GameManager : MonoBehaviour
         if (_timerCoroutine != null)
         {
             StopCoroutine(_timerCoroutine);
-            _roundsTimers[_wordsLibrary.Words.Count - _wordsQueue.Count - 1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
+            _roundsTimers[_finishedWordsCount - 1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
         }
         _startRoundTime = DateTime.Now;
         _timerCoroutine = StartCoroutine(TimerRoutine());
 
-        _gameProcessText.text = string.Format("{0}/{1}", Mathf.Clamp(_wordsLibrary.Words.Count - _wordsQueue.Count, 0, int.MaxValue), _wordsLibrary.Words.Count);
+        _gameProcessText.text = string.Format("{0}/{1}", Mathf.Clamp(_wordsLibrary.WordsPerRound - _wordsQueue.Count, 0, int.MaxValue), _wordsLibrary.WordsPerRound);
     }
     private void CheckIfWordIsComplete()
     {
@@ -105,7 +108,8 @@ public class GameManager : MonoBehaviour
             word += _letterSlots[i].StoredLetterBox.Letter;
         }
         if (word != _currentWord) return;
-        AnalyticsSender.SendWordEvent(_currentWord, false, _roundTimer - _timeLeft, GetEffectsState());
+        if(_finishedWordsCount >= _wordsLibrary.AnalyticsFreeWords) AnalyticsSender.SendWordEvent(_currentWord, false, _roundTimer - _timeLeft, GetEffectsState());
+        _finishedWordsCount++;
         //word is complete
         SpawnNewWord();
     }
@@ -182,8 +186,9 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         _failedRounds++;
-        _roundsTimers[_wordsLibrary.Words.Count - _wordsQueue.Count - 1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
-        AnalyticsSender.SendWordEvent(_currentWord, true, _roundTimer, GetEffectsState());
+        _roundsTimers[_finishedWordsCount] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
+        if(_finishedWordsCount >= _wordsLibrary.AnalyticsFreeWords) AnalyticsSender.SendWordEvent(_currentWord, true, _roundTimer, GetEffectsState());
+        _finishedWordsCount++;
         SpawnNewWord();
     }
     private Dictionary<string, bool> GetEffectsState()

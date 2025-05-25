@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bf485930e5a760428eb6de7e79f7c62, type: 3}
   m_Name: KoroliticsConfigFile
   m_EditorClassIdentifier: 
-  _apiUrl: paste-server-url-here
+  _apiUrl: test1.filgreenserver.duckdns.org
   _clientRoleName: client_user
   _clientRolePassword: client_password
-  _appName: your-table-name-here
+  _appName: feelmywords
   _enableGPSCollectuion: 0
   _updateSessionLengthFrequency: 60
   _debugMode: 1

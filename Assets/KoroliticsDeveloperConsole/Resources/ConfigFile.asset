@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebff8dd8cf460eb408464995ab064cd7, type: 3}
   m_Name: ConfigFile
   m_EditorClassIdentifier: 
-  ApiUrl: paste-server-url-here
-  DeveloperRoleName: developer_user
-  DeveloperRolePassword: developer_k_pass
+  ApiUrl: test1.filgreenserver.duckdns.org
+  DeveloperRoleName: admin_user
+  DeveloperRolePassword: koro_admin

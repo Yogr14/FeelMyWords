@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac56e970a2558a4bacddafa19939e58, type: 3}
   m_Name: WordsLib
   m_EditorClassIdentifier: 
+  _wordsPerRound: 2
+  _analyticsFreeWords: 1
   _words:
   - "\u041F\u0420\u0418\u0412\u0415\u0422"
   - "\u042F\u0411\u041B\u041E\u041A\u041E"
