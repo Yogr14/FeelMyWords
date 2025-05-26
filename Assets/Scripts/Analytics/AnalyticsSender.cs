@@ -5,11 +5,10 @@ using UnityEngine;
 
 public class AnalyticsSender : MonoBehaviour
 {
-    private const string _eventStartRun = "StartRun";
-    private const string _eventGameOver = "GameOver";
-    public static void SendStartRunEvent()
+    private const string _eventEndRun = "EndRun";
+    public static void SendEndRunEvent()
     {
-        KorolitcsManager.ReportEvent(_eventStartRun, new Dictionary<string, object>
+        KorolitcsManager.ReportEvent(_eventEndRun, new Dictionary<string, object>
         {
             { StartSurveyMenu.UserGenderKey, PlayerPrefs.GetString(StartSurveyMenu.UserGenderKey, "Male") },
             { StartSurveyMenu.UserAgeKey, PlayerPrefs.GetInt(StartSurveyMenu.UserAgeKey, 18)},

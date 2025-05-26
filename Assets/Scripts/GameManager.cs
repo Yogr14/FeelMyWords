@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
         {
             _gameOverAction?.Invoke(_wordsLibrary.WordsPerRound - _failedRounds, _wordsLibrary.WordsPerRound, _roundsTimers.Sum() / _roundsTimers.Length);
             _gameOverAction = null;
+            AnalyticsSender.SendEndRunEvent();
             return;
         }
         ClearWord();
