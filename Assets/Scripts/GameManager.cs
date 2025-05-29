@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     private System.Random _random;
     private string _currentWord = string.Empty;
     private float _timeLeft = 0f;
+    private bool _firstLetterPlaced = false;
     public void RestartGame(CallbacksPreset preset, Action<int, int, float> gameOverAction, int seed)
     {
         if (preset == null) return;
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
         int lettersCount = _currentWord.Length;
         _letterSlots = new LetterSlot[lettersCount];
         _letterBoxes = new LetterBox[lettersCount];
+        _firstLetterPlaced = false;
 
         //spawn letter slots
         for (int i = 0; i < lettersCount; i++)
@@ -105,8 +107,14 @@ public class GameManager : MonoBehaviour
         string word = string.Empty;
         for (int i = 0; i < _letterSlots.Length; i++)
         {
-            if (_letterSlots[i].StoredLetterBox == null) return;
+            if (_letterSlots[i].StoredLetterBox == null) continue;
             word += _letterSlots[i].StoredLetterBox.Letter;
+        }
+        if (word.Length == 1 && !_firstLetterPlaced)
+        {
+            float timeSpan = _roundTimer - _timeLeft;
+            AnalyticsSender.SendFirstLetterEvent(_currentWord, word[0], timeSpan);
+            _firstLetterPlaced = true;
         }
         if (word != _currentWord) return;
         if(_finishedWordsCount >= _wordsLibrary.AnalyticsFreeWords) AnalyticsSender.SendWordEvent(_currentWord, false, _roundTimer - _timeLeft, GetEffectsState());

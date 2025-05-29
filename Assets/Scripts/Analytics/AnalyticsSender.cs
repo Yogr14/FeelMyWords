@@ -6,6 +6,8 @@ using UnityEngine;
 public class AnalyticsSender : MonoBehaviour
 {
     private const string _eventEndRun = "EndRun";
+    private const string _eventFirstLetter = "FirstLetter";
+    private const string _wordPassedEvent = "WordPassed";
     public static void SendEndRunEvent()
     {
         KorolitcsManager.ReportEvent(_eventEndRun, new Dictionary<string, object>
@@ -33,6 +35,16 @@ public class AnalyticsSender : MonoBehaviour
         {
             parameters.Add(effect.Key, effect.Value);
         }
-        KorolitcsManager.ReportEvent("Word", parameters);
+        KorolitcsManager.ReportEvent(_wordPassedEvent, parameters);
+    }
+    public static void SendFirstLetterEvent(string word, char letter, float timeSpan)
+    {
+        KorolitcsManager.ReportEvent(_eventFirstLetter, new Dictionary<string, object>
+        {
+            { "Word", word },
+            { "Letter", letter.ToString() },
+            { "TimeSpan", timeSpan },
+            { "Platform", PlayerPrefs.GetString(StartSurveyMenu.PlatformKey, "PC") }
+        });
     }
 }
