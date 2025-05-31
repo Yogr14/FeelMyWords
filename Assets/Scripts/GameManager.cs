@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         if (preset == null) return;
         _callbacksPreset = preset;
         _gameOverAction = gameOverAction;
-        _random = new System.Random(seed);
+        _random = new System.Random(); 
         _roundsTimers = new float[_wordsLibrary.WordsPerRound];
         List<string> words = new(_wordsLibrary.Words);
         while (words.Count > 0)
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
         if (_timerCoroutine != null)
         {
             StopCoroutine(_timerCoroutine);
-            _roundsTimers[_finishedWordsCount - 1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
+            if(_finishedWordsCount > 0) _roundsTimers[_finishedWordsCount - 1] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
         }
         _startRoundTime = DateTime.Now;
         _timerCoroutine = StartCoroutine(TimerRoutine());
