@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac56e970a2558a4bacddafa19939e58, type: 3}
   m_Name: WordsLib
   m_EditorClassIdentifier: 
-  _wordsPerRound: 7
+  _wordsPerRound: 21
   _analyticsFreeWords: 1
   _words:
   - "\u0424\u0418\u0413\u0423\u0420\u0410"
@@ -25,7 +25,7 @@ MonoBehaviour:
   - "\u041A\u0410\u041C\u0415\u0420\u0410"
   - "\u041F\u041E\u0411\u0415\u0414\u0410"
   - "\u0420\u041E\u0414\u0418\u041D\u0410"
-  - "\u041F\u041E\u041C\u041E\u0427\u042C"
+  - "\u041F\u041E\u041C\u041E\u0429\u042C"
   - "\u0416\u0418\u0422\u0415\u041B\u042C"
   - "\u0420\u0410\u0417\u041C\u0415\u0420"
   - "\u041A\u041D\u0418\u0416\u041A\u0410"
