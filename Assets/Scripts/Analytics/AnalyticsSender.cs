@@ -6,7 +6,6 @@ using UnityEngine;
 public class AnalyticsSender : MonoBehaviour
 {
     private const string _eventEndRun = "EndRun";
-    private const string _eventFirstLetter = "FirstLetter";
     private const string _wordPassedEvent = "WordPassed";
     public static void SendEndRunEvent()
     {
@@ -22,13 +21,15 @@ public class AnalyticsSender : MonoBehaviour
             { StartSurveyMenu.DisciplineNameKey, PlayerPrefs.GetString(StartSurveyMenu.DisciplineNameKey, "Критическое мышление") }
         });
     }
-    public static void SendWordEvent(string word, bool timeOut, float timeSpan, Dictionary<string, bool> effectsEnabledState)
+    public static void SendWordEvent(string word, bool timeOut, float timeSpan, string firstLetter, float fLTimeSpan, Dictionary<string, bool> effectsEnabledState)
     {
         var parameters = new Dictionary<string, object>
         {
             { "Word", word },
             { "TimeOut", timeOut },
             { "TimeSpan", timeSpan },
+            { "FirstLetter", firstLetter },
+            { "FirstLetterTimeSpan", fLTimeSpan },
             { "Platform", PlayerPrefs.GetString(StartSurveyMenu.PlatformKey, "PC")}
         };
         foreach (var effect in effectsEnabledState)
@@ -36,15 +37,5 @@ public class AnalyticsSender : MonoBehaviour
             parameters.Add(effect.Key, effect.Value);
         }
         KorolitcsManager.ReportEvent(_wordPassedEvent, parameters);
-    }
-    public static void SendFirstLetterEvent(string word, char letter, float timeSpan)
-    {
-        KorolitcsManager.ReportEvent(_eventFirstLetter, new Dictionary<string, object>
-        {
-            { "Word", word },
-            { "Letter", letter.ToString() },
-            { "TimeSpan", timeSpan },
-            { "Platform", PlayerPrefs.GetString(StartSurveyMenu.PlatformKey, "PC") }
-        });
     }
 }

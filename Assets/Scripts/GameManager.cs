@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     private string _currentWord = string.Empty;
     private float _timeLeft = 0f;
     private bool _firstLetterPlaced = false;
+    private string _firstLetter = string.Empty;
+    private float _firstLetterTimeSpan = 0f;
     public void RestartGame(CallbacksPreset preset, Action<int, int, float> gameOverAction, int seed)
     {
         if (preset == null) return;
@@ -66,6 +68,8 @@ public class GameManager : MonoBehaviour
         _letterSlots = new LetterSlot[lettersCount];
         _letterBoxes = new LetterBox[lettersCount];
         _firstLetterPlaced = false;
+        _firstLetterTimeSpan = 0f;
+        _firstLetter = string.Empty;
 
         //spawn letter slots
         for (int i = 0; i < lettersCount; i++)
@@ -100,7 +104,7 @@ public class GameManager : MonoBehaviour
         _startRoundTime = DateTime.Now;
         _timerCoroutine = StartCoroutine(TimerRoutine());
 
-        _gameProcessText.text = string.Format("{0}/{1}", Mathf.Clamp(_wordsLibrary.WordsPerRound - _wordsQueue.Count, 0, int.MaxValue), _wordsLibrary.WordsPerRound);
+        _gameProcessText.text = string.Format("{0}/{1}", Mathf.Clamp(_finishedWordsCount, 0, int.MaxValue), _wordsLibrary.WordsPerRound);
     }
     private void CheckIfWordIsComplete()
     {
@@ -112,12 +116,13 @@ public class GameManager : MonoBehaviour
         }
         if (word.Length == 1 && !_firstLetterPlaced)
         {
-            float timeSpan = _roundTimer - _timeLeft;
-            AnalyticsSender.SendFirstLetterEvent(_currentWord, word[0], timeSpan);
+            _firstLetterTimeSpan = _roundTimer - _timeLeft;
+            _firstLetter = word.Substring(0, 1);
             _firstLetterPlaced = true;
         }
         if (word != _currentWord) return;
-        if(_finishedWordsCount >= _wordsLibrary.AnalyticsFreeWords) AnalyticsSender.SendWordEvent(_currentWord, false, _roundTimer - _timeLeft, GetEffectsState());
+        if(_finishedWordsCount >= _wordsLibrary.AnalyticsFreeWords)
+            AnalyticsSender.SendWordEvent(_currentWord, false, _roundTimer - _timeLeft, _firstLetter, _firstLetterTimeSpan, GetEffectsState());
         _finishedWordsCount++;
         //word is complete
         SpawnNewWord();
@@ -196,7 +201,8 @@ public class GameManager : MonoBehaviour
         }
         _failedRounds++;
         _roundsTimers[_finishedWordsCount] = (float)(DateTime.Now - _startRoundTime).TotalSeconds;
-        if(_finishedWordsCount >= _wordsLibrary.AnalyticsFreeWords) AnalyticsSender.SendWordEvent(_currentWord, true, _roundTimer, GetEffectsState());
+        if(_finishedWordsCount >= _wordsLibrary.AnalyticsFreeWords)
+            AnalyticsSender.SendWordEvent(_currentWord, true, _roundTimer, _firstLetter, _firstLetterTimeSpan, GetEffectsState());
         _finishedWordsCount++;
         SpawnNewWord();
     }
