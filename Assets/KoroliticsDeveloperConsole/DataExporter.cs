@@ -34,7 +34,7 @@ namespace Services.Korolitics.DeveloperConsole
                     }
                     foreach (var customParam in customParams)
                     {
-                        rowData += $"{customParam.Value},";
+                        rowData += $" {customParam.Value},";
                     }
                 }
                 csv.AppendLine(rowData);
