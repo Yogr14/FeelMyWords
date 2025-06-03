@@ -21,7 +21,7 @@ namespace Services.Korolitics.DeveloperConsole
             // Write header
             var headers = tableContent[0].Keys.ToList();
             csv.AppendLine(string.Join(",", headers.Select(h => $"{h}")));
-            string rowData;
+            string rowData, customParamAsString;
             foreach (var row in tableContent)
             {
                 rowData = string.Empty;
@@ -34,7 +34,11 @@ namespace Services.Korolitics.DeveloperConsole
                     }
                     foreach (var customParam in customParams)
                     {
-                        rowData += $" {customParam.Value},";
+                        customParamAsString = customParam.Value.ToString();
+                        if (float.TryParse(customParamAsString, out float floatValue))
+                            rowData += $" {customParamAsString.Replace(',', '.')},";//replace comma with dot for float values
+                        else
+                            rowData += $"{customParamAsString},";
                     }
                 }
                 csv.AppendLine(rowData);
