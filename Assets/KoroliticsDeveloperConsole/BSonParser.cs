@@ -56,7 +56,6 @@ namespace Services.Korolitics.DeveloperConsole
             int bracketCount = 0;
             int startIndex = 0;
             
-
             for (int i = 0; i < bsonText.Length; i++)
             {
                 if (bsonText[i] == '{')
@@ -80,12 +79,12 @@ namespace Services.Korolitics.DeveloperConsole
         {
             if (!bsonObject.StartsWith("{") || !bsonObject.EndsWith("}"))
             {
-            throw new ArgumentException("Invalid BSON object format: Must start with '{' and end with '}'.");
+                throw new ArgumentException("Invalid BSON object format: Must start with '{' and end with '}'.");
             }
     
             bsonObject = bsonObject.Substring(1, bsonObject.Length - 2); // Remove curly braces
         
-            Dictionary<string, object> result = new Dictionary<string, object>();
+            Dictionary<string, object> result = new ();
             string[] keyValuePairs = SplitKeyValuePairs(bsonObject);
         
             foreach (string keyValuePair in keyValuePairs)
@@ -93,7 +92,7 @@ namespace Services.Korolitics.DeveloperConsole
                 string[] parts = keyValuePair.Split(new[] { ':' }, 2);
                 if (parts.Length != 2)
                 {
-                continue; // Skip invalid key-value pairs
+                    continue; // Skip invalid key-value pairs
                 }
 
                 string key = parts[0].Trim().Trim('"');
@@ -108,9 +107,9 @@ namespace Services.Korolitics.DeveloperConsole
         {
             List<string> keyValuePairs = new List<string>();
             int bracketCount = 0;
+            int quotesCount = 0;
             int startIndex = 0;
         
-
             for (int i = 0; i < bsonObject.Length; i++)
             {
                 if (bsonObject[i] == '{')
@@ -121,7 +120,11 @@ namespace Services.Korolitics.DeveloperConsole
                 {
                     bracketCount--;
                 }
-                else if (bsonObject[i] == ',' && bracketCount == 0)
+                else if (bsonObject[i] == '"')
+                {
+                    quotesCount = (quotesCount + 1) % 2; // Toggle quotes count
+                }
+                else if (bsonObject[i] == ',' && bracketCount == 0 && quotesCount == 0)
                 {
                     keyValuePairs.Add(bsonObject.Substring(startIndex, i - startIndex));
                     startIndex = i + 1;
@@ -159,7 +162,6 @@ namespace Services.Korolitics.DeveloperConsole
             {
                 return dateTimeValue;
             }
-
             return value; // Return as string if no other type matches
         }
 
